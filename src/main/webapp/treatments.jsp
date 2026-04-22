@@ -24,21 +24,22 @@
                     <h5 class="mb-0">Add New Treatment Record</h5>
                 </div>
                 <div class="card-body">
-                    <form action="AddTreatmentServlet" method="POST">
+                    <form action="AddTreatmentServlet" method="POST" onsubmit="return validateForm()">
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label class="form-label text-muted small fw-bold">Patient ID</label>
-                                <input type="number" class="form-control" name="patientId" required>
+                                <input type="number" class="form-control" name="patientId" min="1" required>
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label class="form-label text-muted small fw-bold">Treatment Date</label>
-                                <input type="date" class="form-control" name="treatmentDate" required>
+                                <input type="date" class="form-control" id="treatmentDate" name="treatmentDate" required>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label class="form-label text-muted small fw-bold">Treatment Type</label>
-                                <select class="form-select" name="treatmentType">
+                                <select class="form-select" name="treatmentType" required>
+                                    <option value="" selected disabled>Choose type...</option>
                                     <option value="Cleaning">Teeth Cleaning</option>
                                     <option value="Filling">Cavity Filling</option>
                                     <option value="Extraction">Tooth Extraction</option>
@@ -47,12 +48,12 @@
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label class="form-label text-muted small fw-bold">Cost (Rs.)</label>
-                                <input type="number" step="0.01" class="form-control" name="cost" required>
+                                <input type="number" step="0.01" class="form-control" name="cost" min="0" required>
                             </div>
                         </div>
                         <div class="mb-3">
                             <label class="form-label text-muted small fw-bold">Doctor's Notes</label>
-                            <textarea class="form-control" name="notes" rows="2"></textarea>
+                            <textarea class="form-control" name="notes" rows="2" maxlength="500"></textarea>
                         </div>
                         <div class="text-end">
                             <button type="submit" class="btn btn-success px-4 shadow-sm">Save Record</button>
@@ -124,6 +125,27 @@
     </div>
 
 </div>
+
+<script>
+    // 1. Function to set maximum selectable date as TODAY
+    window.onload = function() {
+        var today = new Date().toISOString().split('T')[0];
+        document.getElementById("treatmentDate").setAttribute('max', today);
+    };
+
+    // 2. Comprehensive form validation
+    function validateForm() {
+        var treatmentDate = document.getElementById("treatmentDate").value;
+        var today = new Date().toISOString().split('T')[0];
+
+        // Ensure date is not in the future
+        if (treatmentDate > today) {
+            alert("Treatment date cannot be in the future)");
+            return false;
+        }
+        return true;
+    }
+</script>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
