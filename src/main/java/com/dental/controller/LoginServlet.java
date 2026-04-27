@@ -13,7 +13,7 @@ import java.io.IOException;
 
 // =======================================================================
 // CONTROLLER: LoginServlet
-// Handles user authentication and session creation
+// Handles user authentication, session creation, and role-based redirection
 // =======================================================================
 @WebServlet("/LoginServlet")
 public class LoginServlet extends HttpServlet {
@@ -31,12 +31,23 @@ public class LoginServlet extends HttpServlet {
         if (loggedInUser != null) {
             // Check if the user's account is active
             if ("Active".equalsIgnoreCase(loggedInUser.getStatus())) {
+
                 // Login successful: Create a session to remember the user
                 HttpSession session = request.getSession();
                 session.setAttribute("activeUser", loggedInUser);
 
-                // Redirect to the main dashboard / home page
-                response.sendRedirect("index.jsp");
+                // --- ROLE-BASED REDIRECTION LOGIC ---
+                // Get the role of the user (Admin, Dentist, or Patient)
+                String userRole = loggedInUser.getRole();
+
+                if ("Admin".equalsIgnoreCase(userRole) || "Dentist".equalsIgnoreCase(userRole)) {
+                    // If the user is an Admin or Dentist, send them to the Dashboard
+                    response.sendRedirect("dashboard.jsp");
+                } else {
+                    // If the user is a normal Patient, send them to the regular Home Page
+                    response.sendRedirect("index.jsp");
+                }
+
             } else {
                 // Account is inactive
                 response.sendRedirect("login.jsp?error=inactive");

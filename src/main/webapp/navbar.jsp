@@ -11,7 +11,7 @@
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm mb-4">
     <div class="container">
-        <a class="navbar-brand fw-bold" href="index.jsp">
+        <a class="navbar-brand fw-bold" href="dashboard.jsp">
             <i class="bi bi-hospital"></i> Dental Clinic System
         </a>
 
